@@ -13,6 +13,7 @@ import lrcrr.teoriaproyecto.TokenType;
 public class Token {
     private TokenType type;
     private String content;
+    private String message;
 
     public Token() {
     }    
@@ -21,6 +22,14 @@ public class Token {
         this.type = type;
         this.content = content;
     }
+
+    public Token(TokenType type, String content, String message) {
+        this.type = type;
+        this.content = content;
+        this.message = message;
+    }
+    
+    
 
     public TokenType getType() {
         return type;
@@ -37,6 +46,16 @@ public class Token {
     public void setContent(String content) {
         this.content = content;
     }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+    
+    
 
     @Override
     public String toString() {

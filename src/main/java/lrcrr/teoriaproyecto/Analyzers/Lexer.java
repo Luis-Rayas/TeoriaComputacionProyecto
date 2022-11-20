@@ -48,63 +48,63 @@ public class Lexer {
                 if (letra.equals('$')) {
                     palabraTerminada = true;
                 }
-                if (palabraTerminada && !letra.equals('$')) {
-                    if (!letra.equals('$') && lastState.estadoActual().equals(estado.estadoActual()) || palabra.toString().isEmpty()) {
+                if (palabraTerminada) {
+                    if (!letra.equals('$')
+                            && lastState.estadoActual().equals(estado.estadoActual())
+                            || palabra.toString().isEmpty()) {
                         palabra.append(letra);
                     }
-                    Token token;
-                    switch (lastState.estadoActual()) {
-                        case Identificador:
-                            token = new Token(TokenType.Identificador, palabra.toString());
-                            break;
-                        case Numero:
-                            token = new Token(TokenType.Numero, palabra.toString());
-                            break;
-                        case NumeroDecimal:
-                            token = new Token(TokenType.NumeroDecimal, palabra.toString());
-                            break;
-                        case NumeroExponencialFinal:
-                            token = new Token(TokenType.NumeroExponencial, palabra.toString());
-                            break;
-                        case PuntoComa:
-                            token = new Token(TokenType.PuntoComa, palabra.toString());
-                            break;
-                        case Igual:
-                            token = new Token(TokenType.Igual, palabra.toString());
-                            break;
-                        case StringLiteralFinal:
-                            token = new Token(TokenType.Cadena, palabra.toString());
-                            break;
-                        case CharLiteralFinal:
-                            token = new Token(TokenType.Caracter, palabra.toString());
-                            break;
-                        case Inicio:
-                            continue;
-                        default:
-                            token = new Token(TokenType.Error, palabra.toString());
-                            palabra.setLength(0);
-                    }
-                    addToken(token);
-                    palabra.setLength(0);
-                    if (!estado.estadoActual().equals(StateType.Inicio)
-                            || estado.estadoActual().equals(StateType.PuntoComa) 
-                            || estado.estadoActual().equals(StateType.Igual)) {
+                    if (estado.estadoActual().equals(StateType.PuntoComa)
+                            || estado.estadoActual().equals(StateType.Igual)
+                            && !letra.equals('$')) {
                         i--;
-                        if(letra.equals('$')){
-                            i++;
-                            i++;
+                    } 
+                    if (letra.equals('$') && estado.estadoActual().equals(StateType.Inicio) && lastState.estadoActual().equals(StateType.Inicio)) {
+                        //addToken(new Token(TokenType.FinCadena, letra.toString()));
+                        continue;
+                    } else {
+                        Token token;
+                        switch (lastState.estadoActual()) {
+                            case Identificador:
+                                token = new Token(TokenType.Identificador, palabra.toString());
+                                break;
+                            case Numero:
+                                token = new Token(TokenType.Numero, palabra.toString());
+                                break;
+                            case NumeroDecimal:
+                                token = new Token(TokenType.NumeroDecimal, palabra.toString());
+                                break;
+                            case NumeroExponencialFinal:
+                                token = new Token(TokenType.NumeroExponencial, palabra.toString());
+                                break;
+                            case PuntoComa:
+                                token = new Token(TokenType.PuntoComa, palabra.toString());
+                                break;
+                            case Igual:
+                                token = new Token(TokenType.Igual, palabra.toString());
+                                break;
+                            case StringLiteralFinal:
+                                token = new Token(TokenType.Cadena, palabra.toString());
+                                break;
+                            case CharLiteralFinal:
+                                token = new Token(TokenType.Caracter, palabra.toString());
+                                break;
+                            case Inicio:
+                                continue;
+                            default:
+                                token = new Token(TokenType.Error, palabra.toString());
+                                palabra.setLength(0);
                         }
+                        addToken(token);
+                        palabra.setLength(0);
                     }
                 } else {
                     palabra.append(letra);
                 }
-                if (letra.equals('$')) {
-                    addToken(new Token(TokenType.FinCadena, letra.toString()));
-                }
             } catch (Exception e) {
                 e.printStackTrace();
                 palabra.append(letra);
-                addToken(new Token(TokenType.Error, palabra.toString()));
+                addToken(new Token(TokenType.Error, palabra.toString(), e.getMessage()));
                 palabra.setLength(0);
                 estado = new Inicio();
                 estado.setLexer(this);

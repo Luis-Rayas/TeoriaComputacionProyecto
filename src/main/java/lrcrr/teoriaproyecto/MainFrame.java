@@ -37,7 +37,8 @@ public class MainFrame extends javax.swing.JFrame {
         for (Token token : lexer.getTokens()) {
             model.addRow(new Object[]{
                 token.getType().name(),
-                token.getContent()
+                token.getContent(),
+                token.getMessage()
             });
         }
     }
@@ -94,11 +95,11 @@ public class MainFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Token Type", "Text"
+                "Token Type", "Text", "Message"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

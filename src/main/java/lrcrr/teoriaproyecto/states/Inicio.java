@@ -28,6 +28,8 @@ public class Inicio implements State{
         Boolean error = false;
         if(Character.isSpaceChar(c) || c.equals('$')){
             //No hay cambio
+            lexer.setEstado(this);
+            lexer.setLastState(lexer.getEstado());
             finished = true;
         } else 
         if(Character.isAlphabetic(c.charValue()) && validState()){//Es un identificador            
