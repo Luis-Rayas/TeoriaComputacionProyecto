@@ -4,6 +4,7 @@
  */
 package lrcrr.teoriaproyecto;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import lrcrr.teoriaproyecto.Analyzers.Lexer;
@@ -21,6 +22,7 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() {
         initComponents();
+        tf_resultado.setEditable(false);
         lexer = new Lexer();
     }
 
@@ -29,6 +31,14 @@ public class MainFrame extends javax.swing.JFrame {
         lexer.analisisLexico(cadena);
         fillTable();
         tf_recorrido.setText(lexer.getCaminoRecorrido().toString());
+        Boolean cadenaValida = lexer.analisisSintactico();
+        if(cadenaValida){
+            tf_resultado.setText("Cadena Valida");
+            tf_resultado.setForeground(Color.GREEN);
+        } else {
+            tf_resultado.setText("Cadena Invalida");
+            tf_resultado.setForeground(Color.RED);
+        }
     }
 
     private void fillTable() {
@@ -110,7 +120,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         jLabel4.setText("Resultado:");
 
-        tf_resultado.setEnabled(false);
         tf_resultado.setFocusable(false);
 
         jLabel5.setText("Recorrido de Estados");

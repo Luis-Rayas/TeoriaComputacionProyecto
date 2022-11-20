@@ -113,6 +113,28 @@ public class Lexer {
         }
     }
 
+    public Boolean analisisSintactico(){
+        if(tokens.isEmpty()){
+            return false;
+        }
+        if(tokens.size() != 4){
+            return false;
+        }
+        if(tokens.get(0).getType().equals(TokenType.Identificador)
+                && tokens.get(1).getType().equals(TokenType.Igual)
+                && (
+                    tokens.get(2).getType().equals(TokenType.Identificador)
+                    || tokens.get(2).getType().equals(TokenType.Cadena)
+                    || tokens.get(2).getType().equals(TokenType.Caracter)
+                    || tokens.get(2).getType().equals(TokenType.Numero)
+                    || tokens.get(2).getType().equals(TokenType.NumeroDecimal)
+                    || tokens.get(2).getType().equals(TokenType.NumeroExponencial)
+                )
+                && tokens.get(3).getType().equals(TokenType.PuntoComa)){
+            return true;
+        }
+        return false;
+    }
     public State getLastState() {
         return lastState;
     }
