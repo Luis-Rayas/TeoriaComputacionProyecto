@@ -4,6 +4,8 @@
  */
 package lrcrr.teoriaproyecto.states;
 
+import lrcrr.teoriaproyecto.Interface.StateType;
+import lrcrr.teoriaproyecto.Interface.State;
 import lrcrr.teoriaproyecto.Analyzers.Lexer;
 
 /**
@@ -11,15 +13,18 @@ import lrcrr.teoriaproyecto.Analyzers.Lexer;
  * @author Desarrollo
  */
 public class CharLiteralFinal implements State{
-    private Lexer lexer;
 
+    private Lexer lexer;
     @Override
-    public Boolean leerCaracter(Character c) throws Exception {        
-        lexer.setEstado(new Inicio());
-        lexer.getEstado().setLexer(lexer);
-        lexer.setLastState(new CharLiteralFinal());
-        lexer.addCaminoRecorrido(estadoActual().name() + "=> " + lexer.getEstado().estadoActual().name() + " ::= " + c);  
-        return true;             
+    public Boolean leerCaracter(Character c) throws Exception {
+        if(c.charValue() == 39) {
+            lexer.setLastState(this);
+            lexer.setEstado(new Inicio());
+            lexer.getEstado().setLexer(lexer);
+            lexer.addCaminoRecorrido(estadoActual().name() + "=> " + lexer.getEstado().estadoActual().name() + " ::= " + c);  
+            return true; 
+        }   
+        throw new Exception("No se esperaba el caracter: " + c + "\n " + estadoActual().name());
     }
 
     @Override
@@ -29,7 +34,7 @@ public class CharLiteralFinal implements State{
 
     @Override
     public Boolean validState() {
-        return true;
+        return lexer.getEstado().estadoActual().equals(StateType.CharLiteral);
     }
 
     @Override

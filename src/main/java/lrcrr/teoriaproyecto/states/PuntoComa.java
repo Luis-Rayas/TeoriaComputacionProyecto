@@ -4,6 +4,8 @@
  */
 package lrcrr.teoriaproyecto.states;
 
+import lrcrr.teoriaproyecto.Interface.StateType;
+import lrcrr.teoriaproyecto.Interface.State;
 import lrcrr.teoriaproyecto.Analyzers.Lexer;
 
 /**
@@ -17,6 +19,7 @@ public class PuntoComa implements State{
     public Boolean leerCaracter(Character c) throws Exception {
         lexer.setEstado(new Inicio());
         lexer.getEstado().setLexer(lexer);
+        lexer.setLastState(this);
         lexer.addCaminoRecorrido(estadoActual().name() + "=> " + lexer.getEstado().estadoActual().toString() + " ::= " + c);  
         return true;
     }

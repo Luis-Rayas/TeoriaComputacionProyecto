@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package lrcrr.teoriaproyecto.states;
+package lrcrr.teoriaproyecto.Interface;
 
 import lrcrr.teoriaproyecto.Analyzers.Lexer;
 
@@ -12,7 +12,7 @@ import lrcrr.teoriaproyecto.Analyzers.Lexer;
  */
 public interface State {
     
-    void leerCaracter(String palabra, Character c) throws Exception;    
+    Boolean leerCaracter(Character c) throws Exception;    
     
     StateType estadoActual();
     

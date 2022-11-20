@@ -4,6 +4,8 @@
  */
 package lrcrr.teoriaproyecto.states;
 
+import lrcrr.teoriaproyecto.Interface.StateType;
+import lrcrr.teoriaproyecto.Interface.State;
 import lrcrr.teoriaproyecto.Analyzers.Lexer;
 import lrcrr.teoriaproyecto.Token;
 import lrcrr.teoriaproyecto.TokenType;
@@ -21,12 +23,13 @@ public class Inicio implements State{
     }
 
     @Override
-    public Boolean leerCaracter(String palabra, Character c) throws Exception {
+    public Boolean leerCaracter(Character c) throws Exception {
         Boolean finished = false;
         Boolean error = false;
-        if(Character.isSpaceChar(c.charValue()) && validState()){
+        if(Character.isSpaceChar(c) || c.equals('$')){
+            //No hay cambio
             finished = true;
-        } else
+        } else 
         if(Character.isAlphabetic(c.charValue()) && validState()){//Es un identificador            
             lexer.setEstado(new Identificador());
             lexer.getEstado().setLexer(lexer);

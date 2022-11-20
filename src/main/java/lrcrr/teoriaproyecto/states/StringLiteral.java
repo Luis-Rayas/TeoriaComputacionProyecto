@@ -4,6 +4,8 @@
  */
 package lrcrr.teoriaproyecto.states;
 
+import lrcrr.teoriaproyecto.Interface.StateType;
+import lrcrr.teoriaproyecto.Interface.State;
 import lrcrr.teoriaproyecto.Analyzers.Lexer;
 
 /**
@@ -17,9 +19,8 @@ public class StringLiteral implements State{
     @Override
     public Boolean leerCaracter(Character c) throws Exception {
         Boolean finished = false;
-        Boolean error = false;
-        if(c.equals("\"") && validState()){ //String literal
-            lexer.setLastState(lexer.getEstado());
+        if(c.equals('"') && validState()){ //String literal final
+            lexer.setLastState(this);
             lexer.setEstado(new StringLiteralFinal());
             lexer.getEstado().setLexer(lexer);
         } 

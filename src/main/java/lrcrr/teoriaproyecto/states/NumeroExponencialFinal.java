@@ -4,6 +4,8 @@
  */
 package lrcrr.teoriaproyecto.states;
 
+import lrcrr.teoriaproyecto.Interface.StateType;
+import lrcrr.teoriaproyecto.Interface.State;
 import lrcrr.teoriaproyecto.Analyzers.Lexer;
 
 /**
@@ -17,10 +19,10 @@ public class NumeroExponencialFinal implements State{
     public Boolean leerCaracter(Character c) throws Exception {
         Boolean finished = false;
         Boolean error = false;
-        if(Character.isSpaceChar(c.charValue()) && validState()){
+        if((Character.isSpaceChar(c) || c.equals('$')) && validState()){
             lexer.setEstado(new Inicio());
             lexer.getEstado().setLexer(lexer);
-            lexer.setLastState(lexer.getEstado());
+            lexer.setLastState(this);
             finished = true;
         } else
         if(Character.isDigit(c.charValue()) && validState()){ //Es un numero
@@ -45,7 +47,9 @@ public class NumeroExponencialFinal implements State{
 
     @Override
     public Boolean validState() {
-        return lexer.getEstado().estadoActual().equals(StateType.NumeroExponencial) || lexer.getEstado().estadoActual().equals(StateType.NumeroExponencialConSigno);
+        return lexer.getEstado().estadoActual().equals(StateType.NumeroExponencial) 
+                || lexer.getEstado().estadoActual().equals(StateType.NumeroExponencialConSigno)
+                || lexer.getEstado().estadoActual().equals(StateType.NumeroExponencialFinal);
     }
 
     @Override

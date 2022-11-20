@@ -9,7 +9,7 @@ import java.util.List;
 import lrcrr.teoriaproyecto.Token;
 import lrcrr.teoriaproyecto.TokenType;
 import lrcrr.teoriaproyecto.states.Inicio;
-import lrcrr.teoriaproyecto.states.State;
+import lrcrr.teoriaproyecto.Interface.State;
 
 /**
  *
@@ -21,7 +21,7 @@ public class Lexer {
     private State lastState;
     private List<Token> tokens;
     private StringBuilder caminoRecorrido;
-    
+
     public Lexer() {
         this.tokens = new ArrayList<>();
         this.estado = new Inicio();
@@ -33,20 +33,72 @@ public class Lexer {
     public void analisisLexico(String texto) {
         this.estado = new Inicio();
         this.estado.setLexer(this);
+        this.lastState = estado;
         tokens.clear();
         caminoRecorrido.setLength(0);
         Character letra;
         StringBuilder palabra = new StringBuilder();
         Boolean palabraTerminada;
+        texto = texto + "$";
         for (int i = 0; i < texto.length(); i++) {
             letra = texto.charAt(i);
             try {                
-                
-               
+                palabraTerminada = estado.leerCaracter(letra);
+                if (letra.equals('$')) {
+                    palabraTerminada = true;
+                }
+                if (palabraTerminada) {
+                    if (!letra.equals('$')) {
+                        palabra.append(letra);
+                    }
+                    Token token;
+                    switch (lastState.estadoActual()) {
+                        case Identificador:
+                            token = new Token(TokenType.Identificador, palabra.toString());
+                            break;
+                        case Numero:
+                            token = new Token(TokenType.Numero, palabra.toString());
+                            break;
+                        case NumeroDecimal:
+                            token = new Token(TokenType.NumeroDecimal, palabra.toString());
+                            break;
+                        case NumeroExponencialFinal:
+                            token = new Token(TokenType.NumeroExponencial, palabra.toString());
+                            break;
+                        case PuntoComa:
+                            token = new Token(TokenType.PuntoComa, palabra.toString());
+                            break;
+                        case Igual:
+                            token = new Token(TokenType.Igual, palabra.toString());
+                            break;
+                        case StringLiteralFinal:
+                            token = new Token(TokenType.Cadena, palabra.toString());
+                            break;
+                        case CharLiteralFinal:
+                            token = new Token(TokenType.Caracter, palabra.toString());
+                            break;
+                        case Inicio:
+                            continue;
+                        default:
+                            token = new Token(TokenType.Error, palabra.toString());
+                            palabra.setLength(0);
+                    }
+                    addToken(token);
+                    palabra.setLength(0);
+                } else {
+                    palabra.append(letra);
+                }
+                if (letra.equals('$')) {
+                    addToken(new Token(TokenType.FinCadena, letra.toString()));
+                }
             } catch (Exception e) {
+                e.printStackTrace();
                 palabra.append(letra);
                 addToken(new Token(TokenType.Error, palabra.toString()));
                 palabra.setLength(0);
+                estado = new Inicio();
+                estado.setLexer(this);
+                lastState = estado;
             }
         }
     }
@@ -57,7 +109,7 @@ public class Lexer {
 
     public void setLastState(State lastState) {
         this.lastState = lastState;
-    }   
+    }
 
     public State getEstado() {
         return estado;

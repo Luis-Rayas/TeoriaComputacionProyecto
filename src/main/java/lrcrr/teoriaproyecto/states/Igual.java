@@ -4,6 +4,8 @@
  */
 package lrcrr.teoriaproyecto.states;
 
+import lrcrr.teoriaproyecto.Interface.StateType;
+import lrcrr.teoriaproyecto.Interface.State;
 import lrcrr.teoriaproyecto.Analyzers.Lexer;
 
 /**
@@ -15,7 +17,7 @@ public class Igual implements State{
     
     @Override
     public Boolean leerCaracter(Character c) throws Exception {
-        lexer.setLastState(new Igual());
+        lexer.setLastState(this);
         lexer.setEstado(new Inicio());
         lexer.getEstado().setLexer(lexer);
         lexer.addCaminoRecorrido(estadoActual().name() + "=> " + lexer.getEstado().estadoActual().toString() + " ::= " + c);  

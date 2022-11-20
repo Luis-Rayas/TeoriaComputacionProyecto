@@ -17,5 +17,6 @@ public enum TokenType {
     NumeroExponencial,
     Igual,
     PuntoComa, 
-    Error
+    Error,
+    FinCadena
 }

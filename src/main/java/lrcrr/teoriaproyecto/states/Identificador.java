@@ -4,6 +4,8 @@
  */
 package lrcrr.teoriaproyecto.states;
 
+import lrcrr.teoriaproyecto.Interface.StateType;
+import lrcrr.teoriaproyecto.Interface.State;
 import lrcrr.teoriaproyecto.Analyzers.Lexer;
 import lrcrr.teoriaproyecto.Token;
 import lrcrr.teoriaproyecto.TokenType;
@@ -27,34 +29,40 @@ public class Identificador implements State {
     }
 
     @Override
-    public Boolean leerCaracter(String palabra, Character c) throws Exception {
+    public Boolean leerCaracter(Character c) throws Exception {
         Boolean finished = false;
         Boolean error = false;
-        if (Character.isSpaceChar(c) && validState()) {
-            lexer.addToken(new Token(TokenType.Identificador, palabra));
+        if(Character.isSpaceChar(c) || c.equals('$')){
+            lexer.setLastState(lexer.getEstado());
             lexer.setEstado(new Inicio());
-            lexer.getEstado().setLexer(lexer);            
-            finished = true;
-        } else if (Character.isAlphabetic(c) && validState()) {//Es un identificador    
-            //No hay cambio de estado
-        } else if (Character.isDigit(c) && validState()) { //Es un numero
-            //No hay cambio de estado
-        } else if (c.equals('=') && validState()) { //Igual
-            lexer.addToken(new Token(TokenType.Identificador, palabra));
-            lexer.setEstado(new Igual());
             lexer.getEstado().setLexer(lexer);
             finished = true;
-        } else if (c.equals(';') && validState()) { //Punto y coma
+        } else 
+        if(Character.isAlphabetic(c.charValue()) && validState()){//Es un identificador            
+            //no hay cambio
+        } else
+        if(Character.isDigit(c.charValue()) && validState()){ //Es un numero
+            //no hay cambio
+        } else
+        if(c.equals('=') && validState()){ //Igual            
+            lexer.setLastState(lexer.getEstado());
+            lexer.setEstado(new Igual() );
+            lexer.getEstado().setLexer(lexer);
+            finished = true;
+        } else
+        if(c.equals(';') && validState()){ //Punto y coma            
             lexer.setLastState(lexer.getEstado());
             lexer.setEstado(new PuntoComa());
             lexer.getEstado().setLexer(lexer);
             finished = true;
-        } else if (c.equals('"') && validState()) { //String literal
+        } else
+        if(c.equals('"') && validState()){ //String literal            
             lexer.setLastState(lexer.getEstado());
             lexer.setEstado(new StringLiteral());
             lexer.getEstado().setLexer(lexer);
             finished = true;
-        } else if (c.charValue() == 39 && validState()) { //Char literal
+        } else 
+        if(c.charValue() == 39 && validState()){ //Char literal            
             lexer.setLastState(lexer.getEstado());
             lexer.setEstado(new CharLiteral());
             lexer.getEstado().setLexer(lexer);
@@ -62,10 +70,10 @@ public class Identificador implements State {
         } else {
             error = true;
         }
-        if (error) {
+        if(error){
             throw new Exception("No se esperaba el caracter: " + c + "\n " + estadoActual().name());
         }
-        lexer.addCaminoRecorrido(estadoActual().name() + "=> " + lexer.getEstado().estadoActual().name() + " ::= \'" + c + "\'");
+        lexer.addCaminoRecorrido(estadoActual().name() + "=> " + lexer.getEstado().estadoActual().name() + " ::= \'" + c + "\'");  
         return finished;
     }
 

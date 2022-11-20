@@ -4,6 +4,8 @@
  */
 package lrcrr.teoriaproyecto.states;
 
+import lrcrr.teoriaproyecto.Interface.StateType;
+import lrcrr.teoriaproyecto.Interface.State;
 import lrcrr.teoriaproyecto.Analyzers.Lexer;
 
 /**
@@ -17,8 +19,8 @@ public class NumeroDecimal implements State{
     public Boolean leerCaracter(Character c) throws Exception {
         Boolean finished = false;
         Boolean error = false;
-        if(Character.isSpaceChar(c.charValue()) && validState()){
-            lexer.setLastState(lexer.getEstado());
+        if((Character.isSpaceChar(c.charValue()) || c.equals('$')) && validState()){
+            lexer.setLastState(this);
             lexer.setEstado(new Inicio());
             lexer.getEstado().setLexer(lexer);
             finished = true;
@@ -28,7 +30,7 @@ public class NumeroDecimal implements State{
             lexer.setEstado(new NumeroDecimal());
             lexer.getEstado().setLexer(lexer);
         } else
-        if(c.equals("E")){ //Exponencial
+        if(c.equals('E')){ //Exponencial
             lexer.setLastState(lexer.getEstado());
             lexer.setEstado(new NumeroExponencial());
             lexer.getEstado().setLexer(lexer);

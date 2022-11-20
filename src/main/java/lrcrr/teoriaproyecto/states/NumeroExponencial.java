@@ -4,6 +4,8 @@
  */
 package lrcrr.teoriaproyecto.states;
 
+import lrcrr.teoriaproyecto.Interface.StateType;
+import lrcrr.teoriaproyecto.Interface.State;
 import lrcrr.teoriaproyecto.Analyzers.Lexer;
 
 /**
@@ -22,12 +24,12 @@ public class NumeroExponencial implements State{
             error = true;
         } else
         if(Character.isDigit(c.charValue()) && validState()){ //Es un numero
-            lexer.setLastState(lexer.getEstado());
+            lexer.setLastState(this);
             lexer.setEstado(new NumeroExponencialFinal());
             lexer.getEstado().setLexer(lexer);
         } else
-        if(c.equals("+") || c.equals("-")){ //Exponencial
-            lexer.setLastState(lexer.getEstado());
+        if(c.equals('+') || c.equals('-')){ //Exponencial
+            lexer.setLastState(this);
             lexer.setEstado(new NumeroExponencialConSigno());
             lexer.getEstado().setLexer(lexer);
         } else

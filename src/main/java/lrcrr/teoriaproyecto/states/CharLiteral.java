@@ -4,6 +4,8 @@
  */
 package lrcrr.teoriaproyecto.states;
 
+import lrcrr.teoriaproyecto.Interface.StateType;
+import lrcrr.teoriaproyecto.Interface.State;
 import lrcrr.teoriaproyecto.Analyzers.Lexer;
 
 /**
@@ -15,8 +17,8 @@ public class CharLiteral implements State{
     private Lexer lexer;
     @Override
     public Boolean leerCaracter(Character c) throws Exception {
-        lexer.setLastState(lexer.getEstado());
-        lexer.setEstado(new CharLiteralIntermedio());
+        lexer.setLastState(this);
+        lexer.setEstado(new CharLiteralFinal());
         lexer.getEstado().setLexer(lexer);
         lexer.addCaminoRecorrido(estadoActual().name() + "=> " + lexer.getEstado().estadoActual().name() + " ::= " + c);  
         return false;
