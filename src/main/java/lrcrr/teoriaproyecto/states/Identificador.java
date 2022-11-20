@@ -38,7 +38,7 @@ public class Identificador implements State {
             lexer.getEstado().setLexer(lexer);
             finished = true;
         } else 
-        if(Character.isAlphabetic(c.charValue()) && validState()){//Es un identificador            
+        if(Character.isAlphabetic(c.charValue()) || c.equals('_') && validState()){//Es un identificador            
             //no hay cambio
         } else
         if(Character.isDigit(c.charValue()) && validState()){ //Es un numero

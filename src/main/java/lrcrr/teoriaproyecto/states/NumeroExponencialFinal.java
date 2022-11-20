@@ -30,7 +30,30 @@ public class NumeroExponencialFinal implements State{
             lexer.setEstado(new NumeroExponencialFinal());
             lexer.getEstado().setLexer(lexer);
         } else
-        {
+        if(c.equals('=') && validState()){ //Igual            
+            lexer.setLastState(lexer.getEstado());
+            lexer.setEstado(new Igual() );
+            lexer.getEstado().setLexer(lexer);
+            finished = true;
+        } else
+        if(c.equals(';') && validState()){ //Punto y coma            
+            lexer.setLastState(lexer.getEstado());
+            lexer.setEstado(new PuntoComa());
+            lexer.getEstado().setLexer(lexer);
+            finished = true;
+        } else
+        if(c.equals('"') && validState()){ //String literal            
+            lexer.setLastState(lexer.getEstado());
+            lexer.setEstado(new StringLiteral());
+            lexer.getEstado().setLexer(lexer);
+            finished = true;
+        } else 
+        if(c.charValue() == 39 && validState()){ //Char literal            
+            lexer.setLastState(lexer.getEstado());
+            lexer.setEstado(new CharLiteral());
+            lexer.getEstado().setLexer(lexer);
+            finished = true;
+        } else {
             error = true;
         }
         if(error){

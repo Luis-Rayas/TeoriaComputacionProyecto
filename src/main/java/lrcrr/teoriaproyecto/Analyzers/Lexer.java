@@ -10,6 +10,7 @@ import lrcrr.teoriaproyecto.Token;
 import lrcrr.teoriaproyecto.TokenType;
 import lrcrr.teoriaproyecto.states.Inicio;
 import lrcrr.teoriaproyecto.Interface.State;
+import lrcrr.teoriaproyecto.Interface.StateType;
 
 /**
  *
@@ -42,13 +43,13 @@ public class Lexer {
         texto = texto + "$";
         for (int i = 0; i < texto.length(); i++) {
             letra = texto.charAt(i);
-            try {                
+            try {
                 palabraTerminada = estado.leerCaracter(letra);
                 if (letra.equals('$')) {
                     palabraTerminada = true;
                 }
-                if (palabraTerminada) {
-                    if (!letra.equals('$')) {
+                if (palabraTerminada && !letra.equals('$')) {
+                    if (!letra.equals('$') && lastState.estadoActual().equals(estado.estadoActual()) || palabra.toString().isEmpty()) {
                         palabra.append(letra);
                     }
                     Token token;
@@ -85,6 +86,15 @@ public class Lexer {
                     }
                     addToken(token);
                     palabra.setLength(0);
+                    if (!estado.estadoActual().equals(StateType.Inicio)
+                            || estado.estadoActual().equals(StateType.PuntoComa) 
+                            || estado.estadoActual().equals(StateType.Igual)) {
+                        i--;
+                        if(letra.equals('$')){
+                            i++;
+                            i++;
+                        }
+                    }
                 } else {
                     palabra.append(letra);
                 }
