@@ -36,7 +36,7 @@ public class Inicio implements State{
             lexer.setEstado(new Identificador());
             lexer.getEstado().setLexer(lexer);
         } else
-        if(Character.isDigit(c.charValue()) && validState()){ //Es un numero
+        if(Character.isDigit(c.charValue())  || c.equals('-') && validState()){ //Es un numero
             lexer.setEstado(new Numero());
             lexer.getEstado().setLexer(lexer);
         } else
